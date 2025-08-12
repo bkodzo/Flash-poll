@@ -4,6 +4,6 @@ channels-redis==4.2.*
 celery==5.3.*
 django-celery-beat==2.6.*
 dj-database-url==2.*
-psycopg[binary]==3.2.*      # ← new pin, no second psycopg line!
+psycopg[binary]==3.2.*      
 python-dotenv==1.0.*
 daphne==4.*

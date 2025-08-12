@@ -33,30 +33,46 @@ cp .env.example .env
 # Start services
 docker compose up --build
 
+```
+
 The app will be available at:
 http://localhost:8000
-Local Development (without Docker)
+
+## Local Development (without Docker)
+
+```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-Running Tests
+```
+## Running Tests
+```bash
 pytest
- WebSocket API
-WebSocket URL:
+```
+## WebSocket API
+## WebSocket URL:
+
+```bash
 ws://localhost:8000/ws/poll/<poll_id>/
-Message format:
+```
+
+## Message format:
+```json
 {
   "type": "vote",
   "choice_id": 1
 }
- Roadmap
+```
+
+## Roadmap
  User authentication
  Poll expiration scheduling
  Docker production build with Nginx
  Frontend enhancements
- License
+## License
+
 MIT License
 
 ---

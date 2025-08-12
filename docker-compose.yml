@@ -1,0 +1,54 @@
+services:
+  web:
+    build: .
+    env_file: .env
+    volumes: ["./:/app"]   # dev hot-reload
+    ports: ["8000:8000"]
+    depends_on: [db, redis]
+    command: >
+      sh -c "
+        until nc -z db 5432; do echo 'waiting for db'; sleep 1; done;
+        python manage.py migrate &&
+        daphne -b 0.0.0.0 -p 8000 flashpoll.asgi:application
+      "
+
+  worker:
+    build: .
+    env_file: .env
+    depends_on: [redis, db]
+    command: >
+      sh -c "
+        until nc -z redis 6379; do echo 'waiting for redis'; sleep 1; done;
+        until nc -z db 5432;   do echo 'waiting for db';    sleep 1; done;
+        python manage.py migrate &&
+        celery -A flashpoll.celery:app worker -l info
+      "
+
+  beat:
+    build: .
+    env_file: .env
+    depends_on: [redis, db]
+    command: >
+      sh -c "
+        until nc -z redis 6379; do echo 'waiting for redis'; sleep 1; done;
+        until nc -z db 5432;   do echo 'waiting for db';    sleep 1; done;
+        python manage.py migrate &&
+        celery -A flashpoll.celery:app beat -l info
+          --scheduler django_celery_beat.schedulers:DatabaseScheduler
+      "
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+
+volumes:
+  pgdata:

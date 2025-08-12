@@ -1,0 +1,5 @@
+pytest==8.*
+pytest-django==4.*
+pytest-asyncio==0.23.*
+freezegun==1.*           # control time deterministically
+ruff==0.*                # optional linter (style & simple correctness)

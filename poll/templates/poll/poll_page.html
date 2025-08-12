@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{ poll.question }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<h1>{{ poll.question }}</h1>
+<script>
+  const slug = "{{poll.slug}}";
+  const ws = new WebSocket(`ws://${window.location.host}/ws/poll/${slug}/`);
+  
+  ws.onmessage = evt => {
+  const data = JSON.parse(evt.data);          // {choice: 5, votes: 3}
+  const btn = document.querySelector(`button[data-id="${data.choice}"]`);
+  if (btn) btn.querySelector("span").textContent = data.votes;
+};
+
+
+</script>
+
+
+<ul id="choice-list">
+  {% for c in choices %}
+    <li>
+      <button data-id="{{ c.id }}">{{ c.text }} (<span>{{ c.votes }}</span>)</button>
+    </li>
+  {% endfor %}
+</ul>
+
+<script>
+document.querySelectorAll("button[data-id]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    fetch("/api/vote/", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({choice_id: btn.dataset.id})
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        // update the vote count in DOM
+        btn.querySelector("span").textContent = data.votes;
+      } else { alert("vote error"); }
+    });
+  });
+});
+</script>
+</body>
+</html>

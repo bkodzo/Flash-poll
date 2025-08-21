@@ -11,7 +11,7 @@
   const ws = new WebSocket(`ws://${window.location.host}/ws/poll/${slug}/`);
   
   ws.onmessage = evt => {
-  const data = JSON.parse(evt.data);          // {choice: 5, votes: 3}
+  const data = JSON.parse(evt.data);          
   const btn = document.querySelector(`button[data-id="${data.choice}"]`);
   if (btn) btn.querySelector("span").textContent = data.votes;
 };

@@ -19,5 +19,73 @@ build/
 .cache/
 node_modules/
 
-# Django collectstatic (if you add it later)
+# Django collectstatic 
 staticfiles/
+# Django / Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+
+# Logs
+logs/
+*.log
+django.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Migration files 
+# poll/migrations/0001_initial.py
+# poll/migrations/0002_*.py
+# poll/migrations/0003_*.py
+
+
+
+# Cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+staticfiles/
+static/
+media/
+
+# Backup files
+*.orig
+*.rej
